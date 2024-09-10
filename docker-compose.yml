@@ -1,0 +1,51 @@
+version: '3.7'
+services:
+    php-fpm:
+      container_name: ${APP_NAME}-php
+      build:
+          args:
+              user: user
+              uid: 1000
+          dockerfile: Dockerfile
+      volumes:
+          - '.:/var/www/html'
+      ports: 
+          - '9000:9000'
+          - '5173:5173'
+      networks:
+          - crud
+      depends_on:
+          - db
+    nginx:
+      image: nginx:latest
+      container_name: ${APP_NAME}-nginx
+      ports:
+           - '80:80'
+      networks:
+           - crud
+      volumes:
+           - '.:/var/www/html'
+           - './docker/nginx:/etc/nginx/conf.d'
+      depends_on:
+           - db
+    db:
+      image: mysql:8.0
+      volumes:
+           - './docker/data:/var/lib/mysql'
+      networks:
+           - crud
+      restart: always
+      environment:
+        MYSQL_DATABASE: ${DB_DATABASE}
+        MYSQL_PASSWORD: ${DB_PASSWORD}
+        MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+    adminer:
+      image: adminer
+      restart: always
+      networks:
+           - crud
+      ports:
+        - 8092:8080
+networks:
+    crud:
+        driver: bridge

@@ -1,0 +1,32 @@
+@import "@fortawesome/fontawesome-free/css/all.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+@layer components {
+	.row {
+		@apply mb-4;
+	}
+
+	.paginator {
+		@apply flex;
+	}
+
+	.paginator>li.control {
+		@apply mx-2 cursor-pointer;
+	}
+
+	.paginator>li:not(.control) {
+		@apply mx-2 cursor-pointer w-6 text-center border-blue border-2 bg-white text-blue;
+	}
+
+	.paginator>li.disabled {
+		@apply opacity-10;
+	}
+
+	.paginator>li.current-page {
+		@apply font-bold text-white bg-blue;
+	}
+}
